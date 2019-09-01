@@ -1,0 +1,12 @@
+REM ====================================
+REM MigFTCommMgr.opt 
+REM SocketPortNo등 필요한 option 정의
+REM Origin이 Source이면 SocketPort는 홀수로
+REM Origin이 Target이면 SocketPort는 짝수로 정의한다
+REM BaseIP : MigPro 시스템이 설치되어 있는 Workstation IP
+REM SocketPort : MigFTCommMgr가 설치되어 있는 Server에서 사용할 Port 번호
+REM ====================================
+
+Origin Target
+BaseIP 192.168.0.35
+SocketPort 65003

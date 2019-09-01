@@ -1,0 +1,8 @@
+REM ------------------------------------------------------------------
+REM Transfer File Sample List
+REM ------------------------------------------------------------------
+
+D:\MigPro\Executable\Options\sample_ansi.txt
+D:\MigPro\Executable\Options\sample_utf8.txt
+D:\MigPro\Executable\Classes\migpro\Amig.class
+FT_QUIT
