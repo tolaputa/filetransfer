@@ -1,54 +1,39 @@
 package app;
 
-import delegator.FileWriteThread;
 import util.FileUtil;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class BaseClient {
 
-
-
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 8000);
 
-        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-        printWriter.println("/Users/dino/Picture/img_02.jpg");
-        printWriter.flush();
-
-//        FileWriteThread fileWriter = new FileWriteThread(socket);
-//        fileWriter.run();
+        Socket sourceServerSocket = new Socket("localhost", 8000);
+        OutputStream sourceOutputStream = sourceServerSocket.getOutputStream();
+        PrintWriter sourcePrintWriter = new PrintWriter(new OutputStreamWriter(sourceOutputStream));
+        sourcePrintWriter.println("/Users/dino/Pictures/img_02.jpg");
+        sourcePrintWriter.flush();
 
 
-        InputStream inputStream = socket.getInputStream();
-        FileUtil.byteToIfile(FileUtil.readAsByteArray(inputStream), "/Users/dino/Desktop/img_02.jpg");
+        InputStream inputStream = sourceServerSocket.getInputStream();
+        byte [] fileBytes = FileUtil.readAsByteArray(inputStream);
 
-        socket.close();
-
-
-
-
-
-//        socket.close();
-
-//        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//        System.out.println(bufferedReader.readLine());
+        sourceOutputStream.close();
+        inputStream.close();
+        sourceServerSocket.close();
 
 
+        Socket targetServerSocket = new Socket("localhost", 8001);
+        OutputStream targetServerSocketOutputStream = targetServerSocket.getOutputStream();
+        /*PrintWriter targetServerWriter = new PrintWriter(new OutputStreamWriter(targetServerSocket.getOutputStream()));
+        targetServerWriter.println("/Users/dino/Desktop/img_10.jpg");
+        targetServerWriter.flush();*/
 
-//        InputThread inputThread = new InputThread(socket, bufferedReader);
+        targetServerSocketOutputStream.write(fileBytes);
+        targetServerSocketOutputStream.flush();
+        targetServerSocket.close();
 
-
-        /*OutputStream outputStream = socket.getOutputStream();
-        outputStream.write("/Users/dino/Picture/img_02.jpg".getBytes());
-        outputStream.flush();
-        InputStream inputStream = socket.getInputStream();
-        FileUtil.byteToIfile(FileUtil.readAsByteArray(inputStream), "/Users/dino/Desktop/img_02.jpg");
-        socket.close();
-        System.exit(0);*/
+        System.exit(0);
     }
 }

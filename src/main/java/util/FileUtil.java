@@ -60,7 +60,7 @@ public class FileUtil {
      * @param fileName
      * @return
      */
-    public static File byteToIfile(byte[] bytes, String fileName){
+    public static File byteToFile(byte[] bytes, String fileName){
         File file = new File(fileName);
         try {
             OutputStream output = new FileOutputStream(file);

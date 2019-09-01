@@ -1,20 +1,33 @@
 package app;
 
-import delegator.SourceThread;
+import util.FileUtil;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.net.Socket;
 
 public class SourceServer {
 
-    private static ExecutorService threadPool = Executors.newCachedThreadPool();
-
     public static void main(String[] args) throws IOException {
+
         ServerSocket serverSocket = new ServerSocket(8000);
+        Socket socket;
+        OutputStream outputStream;
+        BufferedReader bufferedReader;
+        String fileName;
+
         while (true) {
-            threadPool.execute(SourceThread.getInstance(serverSocket.accept()));
+            socket = serverSocket.accept();
+            if ( socket.isConnected() ) {
+                bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                fileName = bufferedReader.readLine();
+                outputStream = socket.getOutputStream();
+                outputStream.write(FileUtil.fileToByte(new File(fileName)));
+                socket.getInputStream().close();
+                outputStream.flush();
+                outputStream.close();
+            }
         }
+
     }
 }
