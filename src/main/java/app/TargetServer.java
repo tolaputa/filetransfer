@@ -12,7 +12,7 @@ public class TargetServer {
 
         ServerSocket serverSocket = new ServerSocket(8001);
         Socket socket;
-        OutputStream outputStream;
+        InputStream inputStream;
         BufferedReader bufferedReader;
         String fileName;
         byte[] fileBytes;
@@ -20,11 +20,16 @@ public class TargetServer {
         while (true) {
             socket = serverSocket.accept();
             if ( socket.isConnected() ) {
-//                bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//                fileName = bufferedReader.readLine();
-                fileBytes = FileUtil.readAsByteArray(socket.getInputStream());
-                FileUtil.byteToFile(fileBytes, "/Users/dino/Desktop/img_11.jpg");
-//                bufferedReader.close();
+                // 파일명 얻기
+                inputStream = socket.getInputStream();
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                fileName = bufferedReader.readLine();
+                // 파일명 얻기 끝
+
+                // 파일 쓰기
+                fileBytes = FileUtil.readAsByteArray(inputStream);
+                FileUtil.byteToFile(fileBytes, fileName);
+                // 파일 쓰기 끝
                 socket.getInputStream().close();
             }
         }
